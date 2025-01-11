@@ -1,0 +1,95 @@
+﻿@model AspStudio.Models.DTOs.UserD.UsersDTO
+@* @page
+@model LoginModel
+
+@{
+	ViewData["Title"] = "Log in";
+	ViewData["AppClass"] = "app-full-height app-without-header app-full-width";
+	ViewData["AppWithoutHeader"] = true;
+	ViewData["AppWithoutSidebar"] = true;
+	ViewData["AppWithoutContainer"] = true;
+}
+ *@
+<!-- BEGIN login -->
+<div class="login">
+	<!-- BEGIN login-content -->
+	<div class="login-content">
+		<form asp-action="Login" method="post" id="loginForm">
+			<h1 class="text-center">Sign In</h1>
+			<div class="text-muted text-center mb-4">
+				For your protection, please verify your identity.
+			</div>
+			<div asp-validation-summary="All" class="text-danger"></div>
+			<div class="mb-3">
+				<label class="form-label" asp-for="Email"></label>
+				<input asp-for="Email" class="form-control form-control-lg fs-15px" placeholder="username@address.com" />
+				<span asp-validation-for="Email" class="text-danger"></span>
+			</div>
+			<div class="mb-3">
+				<div class="d-flex">
+					<label asp-for="Password" class="form-label">Password</label>
+					<a id="forgot-password" 
+					@* asp-page="~/ForgotPassword"  *@
+					class="ms-auto text-muted">Forgot password?</a>
+				</div>
+				<input asp-for="Password" class="form-control form-control-lg fs-15px" value="" placeholder="Enter your password" />
+				<span asp-validation-for="Password" class="text-danger"></span>
+			</div>
+			@* <div class="mb-3">
+				<div class="form-check">
+					<input class="form-check-input" asp-for="RememberMe" />
+					<label class="form-check-label fw-500" asp-for="RememberMe">@Html.DisplayNameFor(m => m.RememberMe)</label>
+				</div>
+			</div> *@
+			<button type="submit" class="btn btn-theme btn-lg d-block w-100 fw-500 mb-3">Sign In</button>
+			<div class="text-center text-muted">
+				Don't have an account yet? @* <a asp-page="~/Register"> *@
+					Sign up</a>.
+			</div>
+		</form>
+	</div>
+	<!-- END login-content -->
+</div>
+<!-- END login -->
+<!--  Small modal example -->
+<div class="modal fade bs-example-modal-sm" id="responsemodal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="mySmallModalLabel">Alert!</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p id="successMessage"></p>
+				<p id="errorMessage"></p>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
+<script>
+	$(document).ready(function () {
+
+	@if (TempData["SuccessMessage"] != null)
+	{
+
+		<text>
+					// Show success popup
+				$("#successMessage").text('@TempData["SuccessMessage"]');
+				$("#responsemodal").modal("show");
+		</text>
+	}
+	@if (TempData["ErrorMessage"] != null)
+	{
+
+		<text>
+					// Show error popup
+				$("#errorMessage").text('@TempData["ErrorMessage"]');
+				$("#responsemodal").modal("show");
+		</text>
+	}
+					});
+</script>

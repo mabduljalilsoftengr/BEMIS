@@ -1,0 +1,64 @@
+﻿
+<!-- BEGIN login -->
+<div class="login">
+	<!-- BEGIN login-content -->
+	<div class="login-content">
+		<form asp-action="AddRole" method="post" id="addroleForm">
+			<h1 class="text-center">Add Role</h1>
+			
+			<div asp-validation-summary="All" class="text-danger"></div>
+			<div class="mb-3">
+				<label class="form-label" ></label>
+				<input  id="role-name-input" name="roleName" class="form-control form-control-lg fs-15px" placeholder="" />
+				<span class="text-danger"></span>
+			</div>
+			
+			<button type="submit" class="btn btn-theme btn-lg d-block w-100 fw-500 mb-3">Add Role</button>
+			
+		</form>
+	</div>
+	<!-- END login-content -->
+</div>
+<!-- END login -->
+<!--  Small modal example -->
+<div class="modal fade bs-example-modal-sm" id="responsemodal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="mySmallModalLabel">Alert!</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<p id="successMessage"></p>
+				<p id="errorMessage"></p>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
+<script>
+	$(document).ready(function () {
+
+	@if (TempData["SuccessMessage"] != null)
+	{
+
+		<text>
+						// Show success popup
+					$("#successMessage").text('@TempData["SuccessMessage"]');
+					$("#responsemodal").modal("show");
+		</text>
+	}
+	@if (TempData["ErrorMessage"] != null)
+	{
+
+		<text>
+						// Show error popup
+					$("#errorMessage").text('@TempData["ErrorMessage"]');
+					$("#responsemodal").modal("show");
+		</text>
+	}
+					});
+</script>

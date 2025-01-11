@@ -1,0 +1,158 @@
+﻿@model AspStudio.Models.ViewModels.UserVM.UserRoleViewModel;
+@section Scripts {
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+}
+<!-- BEGIN login -->
+<div id="formControls" class="mb-5">
+						
+						<div class="card">
+							<div class="card-body pb-2">
+								<form>
+									<div class="row">
+					<div class="col-xl-6">
+						<div class="form-group mb-3">
+							<label class="form-label" for="exampleFormControlSelect1">Select dropdown</label>
+                            <select class="form-select" id="drp_role">
+								<option>--Select Role--</option>
+								@foreach (var role in Model.roles)
+								{
+									<option value="@role.Id">@role.Name</option>
+
+								}
+							</select>
+                            <!-- Add a hidden input field to store the selected role ID -->
+                            <input type="hidden" id="selectedRoleId" name="selectedRoleId" value="">
+						</div>
+						
+					</div>
+				</div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+
+                                <h4 class="card-title">Select User</h4>
+
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped table-nowrap mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th hidden>ID</th>
+                                                <th>Select User</th>
+                                                <th scope="col" class="text-center">
+                                                    First Name
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Last Name
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Mobile
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    Gender
+                                                </th>
+                                                <th scope="col" class="text-center">
+                                                    User Name
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var rw in Model.users)
+                                            {
+                                                <tr>
+                                                    <td hidden>@rw.Id</td>
+                                                    @*  <td><button class="select-button btn btn-primary">Select</button></td> *@
+                                                    <td><input type="checkbox" class="select-checkbox" /></td>
+                                                    <td>@rw.FirstName </td>
+                                                    <td>@rw.LastName</td>
+                                                    <td>@rw.Mobile</td>
+                                                    <td>@rw.Gender</td>
+                                                    <td>@rw.UserName</td>
+                                                </tr>
+                                            }
+
+                                        </tbody>
+                                        <!-- Add a hidden input field to store the selected role ID -->
+
+                                    </table>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- end col -->
+
+                </div> <!-- end row -->
+
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="mb-3">
+                            <button id="btnsave" class="btn btn-success waves-effect waves-light">
+                                <i class="bx bx-check-double font-size-16 align-middle me-2"></i> Save
+                            </button>
+                        </div>
+                    </div>
+                </div>
+				</form>
+		</div>
+	</div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $("#drp_role").change(function () {
+            var selectedRoleId = $(this).val();
+            alert(selectedRoleId);
+            $("#selectedRoleId").val(selectedRoleId);
+        });
+
+
+        // Declare selectedUserId in a higher scope
+        var selectedUserId = "";
+
+        // Attach a click event handler to the checkboxes
+        $(".select-checkbox").click(function () {
+            // Uncheck all other checkboxes in the table
+            $(".select-checkbox").not(this).prop("checked", false);
+            selectedUserId = $(this).closest("tr").find("td:first-child").text();
+            alert(selectedUserId);
+        });
+
+        $("#btnsave").click(function () {
+            var rol = $("#selectedRoleId").val();
+            if (rol === null || rol === "") { alert("No Role selected."); return; }
+
+            // Check if a user is selected
+            if (selectedUserId === "") { alert("No user selected."); return; }
+
+            alert(rol + ',' + selectedUserId);
+            // ajax call - Start
+            $.ajax({
+                url: "/Auth/AssignRole_To_User",
+                type: "POST",
+                data: { RoleID: rol, UserID: selectedUserId },
+                contentType: "application/x-www-form-urlencoded",
+                success: function (response) {
+                    if (response.status === "success") {
+                        alert(response.message);
+                        window.location.href = "/Auth/AssignRoleToUser";
+                    } else {
+                        alert(response.message);
+                        window.location.href = "/Auth/AssignRoleToUser";
+                        // Handle error
+                    }
+                },
+                error: function (error) {
+                    // Handle the error
+                    console.log(error);
+                }
+            });
+            // ajax call - End
+        });
+
+    });
+
+</script>
